@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Railway Ticket Booking System</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+   
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+   
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+   
+    <header class="railway-header">
+        <div class="container-fluid">
+            <div class="header-content">
+                <div class="logo-section">
+                    <i class="bi bi-train-front-fill"></i>
+                    <h1>Indian Railways</h1>
+                </div>
+                <p class="tagline">Your Journey, Our Priority</p>
+            </div>
+        </div>
+    </header>
+
+   
+    <nav class="navbar navbar-expand-lg navbar-dark railway-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#home"><i class="bi bi-train-front"></i> Railway Booking</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#booking">Book Ticket</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pnr-status">PNR Status</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    
+    <main class="py-5">
+        <div class="container">
+            
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8">
+                    <div class="booking-card">
+                        <h2 class="text-center mb-4">
+                            <i class="bi bi-ticket-perforated"></i> Book Your Railway Ticket
+                        </h2>
+
+                        <form id="bookingForm">
+                            <div class="row mb-3">
+                                
+                                <div class="col-md-6">
+                                    <label for="source" class="form-label mandatory">Source Station</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control station-input" 
+                                        id="source" 
+                                        placeholder="e.g., Delhi"
+                                        autocomplete="off"
+                                        required>
+                                    <small class="error-message" id="sourceError"></small>
+                                </div>
+
+                              
+                                <div class="col-md-6">
+                                    <label for="destination" class="form-label mandatory">Destination Station</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control station-input" 
+                                        id="destination" 
+                                        placeholder="e.g., Mumbai"
+                                        autocomplete="off"
+                                        required>
+                                    <small class="error-message" id="destinationError"></small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                              
+                                <div class="col-md-6">
+                                    <label for="journeyDate" class="form-label mandatory">Journey Date</label>
+                                    <input 
+                                        type="date" 
+                                        class="form-control" 
+                                        id="journeyDate"
+                                        required>
+                                    <small class="error-message" id="dateError"></small>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="classSelect" class="form-label mandatory">Class</label>
+                                    <select class="form-select" id="classSelect" required>
+                                        <option value="">Select Class</option>
+                                        <option value="Sleeper" data-price="500">Sleeper (₹500)</option>
+                                        <option value="3A" data-price="800">3A (₹800)</option>
+                                        <option value="2A" data-price="1200">2A (₹1200)</option>
+                                        <option value="1A" data-price="1800">1A (₹1800)</option>
+                                    </select>
+                                    <small class="form-text text-muted">
+                                        <i class="bi bi-info-circle"></i> Higher class offers better comfort
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                
+                                <div class="col-md-6">
+                                    <label for="quotaSelect" class="form-label mandatory">Quota</label>
+                                    <select class="form-select" id="quotaSelect" required>
+                                        <option value="">Select Quota</option>
+                                        <option value="General" data-surcharge="0">General (No Extra)</option>
+                                        <option value="Tatkal" data-surcharge="500">Tatkal (+₹500)</option>
+                                        <option value="Ladies" data-surcharge="0">Ladies (No Extra)</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="passengerCount" class="form-label mandatory">Passenger Count</label>
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary" type="button" id="decreasePassenger">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input 
+                                            type="number" 
+                                            class="form-control text-center" 
+                                            id="passengerCount" 
+                                            value="1" 
+                                            min="1" 
+                                            max="6"
+                                            readonly>
+                                        <button class="btn btn-outline-secondary" type="button" id="increasePassenger">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                    <small class="error-message" id="passengerError"></small>
+                                </div>
+                            </div>
+
+                            
+                            <div class="d-grid gap-2">
+                                <button 
+                                    type="submit" 
+                                    class="btn btn-search btn-lg"
+                                    id="searchButton">
+                                    <i class="bi bi-search"></i> Search Trains
+                                </button>
+                            </div>
+
+                           
+                            <div class="d-grid gap-2 mt-2">
+                                <button 
+                                    type="reset" 
+                                    class="btn btn-outline-secondary"
+                                    id="resetButton">
+                                    <i class="bi bi-arrow-clockwise"></i> Reset Form
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-5" id="fareSection" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="fare-card">
+                        <h4 class="mb-3"><i class="bi bi-receipt"></i> Fare Breakdown</h4>
+                        <div class="fare-details">
+                            <div class="fare-row">
+                                <span>Base Fare (per passenger):</span>
+                                <strong id="baseFare">₹0</strong>
+                            </div>
+                            <div class="fare-row">
+                                <span>Quota Surcharge:</span>
+                                <strong id="quotaSurcharge">₹0</strong>
+                            </div>
+                            <div class="fare-row">
+                                <span>GST (5%):</span>
+                                <strong id="gstAmount">₹0</strong>
+                            </div>
+                            <hr>
+                            <div class="fare-row total">
+                                <span>Total Fare for All Passengers:</span>
+                                <strong id="totalFare">₹0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="row justify-content-center mb-5" id="trainsSection" style="display: none;">
+                <div class="col-lg-8">
+                    <h3 class="mb-3"><i class="bi bi-train-front-fill"></i> Available Trains</h3>
+                    <div id="trainsList" class="trains-container">
+                        
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center mb-5" id="seatSection" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="seat-card">
+                        <h4 class="mb-3"><i class="bi bi-chair"></i> Seat Availability</h4>
+                        <div class="seat-availability">
+                            <div class="seat-status">
+                                <span class="seat-available">Available</span>
+                                <span id="seatCount">0</span> seats
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress">
+                                    <div id="seatBar" class="progress-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+         
+            <div class="row justify-content-center mb-5" id="passengerSection" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="passenger-card">
+                        <h4 class="mb-3"><i class="bi bi-people-fill"></i> Passenger Details</h4>
+                        <div id="passengerList">
+                          
+                        </div>
+                        <button class="btn btn-primary mt-3" id="proceedButton" style="display: none;">
+                            <i class="bi bi-arrow-right"></i> Proceed to Payment
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="row justify-content-center mb-5" id="summarySection" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="summary-card">
+                        <h3 class="mb-3"><i class="bi bi-check-circle"></i> Booking Summary</h3>
+                        <div class="summary-details">
+                            <p><strong>Train Name:</strong> <span id="summaryTrain">-</span></p>
+                            <p><strong>Route:</strong> <span id="summarySummary">-</span> to <span id="summaryDestination">-</span></p>
+                            <p><strong>Date:</strong> <span id="summaryDate">-</span></p>
+                            <p><strong>Class:</strong> <span id="summaryClass">-</span></p>
+                            <p><strong>Passengers:</strong> <span id="summaryPassengers">-</span></p>
+                            <p><strong>Total Fare:</strong> <span id="summaryTotal">-</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          
+            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header railway-modal-header">
+                            <h5 class="modal-title"><i class="bi bi-exclamation-triangle"></i> Confirm Booking</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to book this ticket?</p>
+                            <p><strong>Total Amount to Pay: <span id="modalAmount">₹0</span></strong></p>
+                            <p class="text-muted small">Once confirmed, you will receive a PNR number via email.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-success" id="confirmBookingBtn">
+                                <i class="bi bi-check-lg"></i> Confirm & Book
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="row justify-content-center mb-5" id="successSection" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="success-card">
+                        <div class="success-icon">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <h2>Thank You for Booking!</h2>
+                        <p>Your ticket has been successfully booked.</p>
+                        <div class="pnr-box">
+                            <p class="text-muted">Your PNR Number</p>
+                            <h3 id="pnrNumber">-</h3>
+                        </div>
+                        <div class="booking-details">
+                            <p><strong>Train:</strong> <span id="successTrain">-</span></p>
+                            <p><strong>Route:</strong> <span id="successRoute">-</span></p>
+                            <p><strong>Passengers:</strong> <span id="successPassengers">-</span></p>
+                            <p><strong>Total Paid:</strong> <span id="successTotal">-</span></p>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" id="downloadTicket">
+                                <i class="bi bi-download"></i> Download Ticket
+                            </button>
+                            <button class="btn btn-outline-danger" id="cancelBooking">
+                                <i class="bi bi-x-lg"></i> Cancel Booking
+                            </button>
+                            <button class="btn btn-secondary" id="bookAgain">
+                                <i class="bi bi-plus"></i> Book Another
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+           
+            <div class="row justify-content-center mb-5" id="pnrStatusSection" style="display: none;">
+                <div class="col-lg-8">
+                    <div class="pnr-card">
+                        <h3 class="mb-3"><i class="bi bi-search"></i> Check PNR Status</h3>
+                        <div class="input-group mb-3">
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="pnrInput" 
+                                placeholder="Enter PNR Number"
+                                maxlength="10">
+                            <button class="btn btn-primary" type="button" id="checkPnrBtn">Check Status</button>
+                        </div>
+                        <div id="pnrResult"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+    <footer class="railway-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Railway Ticket Booking System</h5>
+                    <p>Disclaimer: This is a demonstration website. All train data is dummy and for educational purposes only.</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p>&copy; 2024 Indian Railways. All rights reserved.</p>
+                    <p>For official bookings, visit <strong>www.irctc.co.in</strong></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+    <script src="./script.js"></script>
+</body>
+</html>
